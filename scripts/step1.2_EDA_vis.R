@@ -128,10 +128,8 @@ dev.off()
 ############Variance#################
 library(scales)
 
-# define the breaks
 my_breaks <- c(1e-10, 1e-4, 1e-3, 1e-2, 1e-1, 1, 5, 10)
 
-# and human‐friendly labels
 my_labels <- c("0", "0.0001%", "0.001%", "0.01%", "0.1%", "1%", "5%", "10%")
 
 vp_tidy <- vp_long %>%
@@ -213,4 +211,37 @@ ggplot(vp_tidy[vp_tidy$Component=="site",], aes(x = Method, y = Variance, fill =
 dev.off()
 
 
+tiff(paste0(here(), "/output/pics/site_var_raw.tiff"), width = 3, height = 5, units = "in", res = 300)
+ggplot(vp_tidy[vp_tidy$Component=="site" & vp_tidy$Method == "raw",], aes(x = Method, y = Variance, )) +
+  geom_violin(trim = F, scale = "width", na.rm = TRUE, fill="#7F7F7F") +
+  stat_summary(fun = median, geom = "point", color = "black", size = 2, na.rm = TRUE) +
+  labs(
+    x = "",
+    y = "Variance (%)"
+  ) +
+  theme_bw() +
+  theme(
+    strip.background = element_rect(fill = "grey95"),
+    legend.position  = "none",
+    axis.text.x  = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+dev.off()
 
+
+tiff(paste0(here(), "/output/pics/outcome_var_raw.tiff"), width = 3, height = 5, units = "in", res = 300)
+ggplot(vp_tidy[vp_tidy$Component=="outcome" & vp_tidy$Method == "raw",], aes(x = Method, y = Variance, )) +
+  geom_violin(trim = F, scale = "width", na.rm = TRUE, fill="#7F7F7F") +
+  stat_summary(fun = median, geom = "point", color = "black", size = 2, na.rm = TRUE) +
+  labs(
+    x     = "",
+    y     = "Variance (%)"
+  ) +
+  theme_bw() +
+  theme(
+    strip.background = element_rect(fill = "grey95"),
+    legend.position  = "none",
+    axis.text.x  = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+dev.off()
